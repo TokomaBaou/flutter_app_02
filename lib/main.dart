@@ -5,9 +5,7 @@ void main() {
   runApp(const MyApp());
 }
 
-// TODO: Hook機能を使ってないのでStatelessで良い。
-// 使ってないのにHookやConsumerを定義してしまうと、可読性が下がってしまいます。
-class MyApp extends HookWidget {
+class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
@@ -29,21 +27,25 @@ class MyAppPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     //インスタンスを作成
-    // TODO: 変数で管理しているのは色のため、changeって命名は適切ではない
-    final change = useState(Colors.green);
+    final color = useState(Colors.green);
 
-    // TODO:下で指摘した用の関数の土台
     Color changeColor() {
-      return Colors.pink;
+      if (color.value == Colors.green) {
+        return color.value = Colors.red;
+      } else if (color.value == Colors.red) {
+        return color.value = Colors.blue;
+      } else {
+        return color.value = Colors.green;
+      }
     }
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text(title),
-        ),
-        backgroundColor: change.value,
-        body: Center(
-            child: Column(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      backgroundColor: color.value,
+      body: Center(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
@@ -56,18 +58,11 @@ class MyAppPage extends HookWidget {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: ElevatedButton(
-                // TODO: onPressedの中身が長いので、関数に切り出す
                 onPressed: () {
-                  if (change.value == Colors.green) {
-                    change.value = Colors.red;
-                  } else if (change.value == Colors.red) {
-                    change.value = Colors.blue;
-                  } else {
-                    change.value = Colors.green;
-                  }
+                  changeColor();
                 },
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: change.value,
+                  foregroundColor: color.value,
                   backgroundColor: Colors.white,
                 ),
                 child: const Text(
@@ -76,7 +71,8 @@ class MyAppPage extends HookWidget {
               ),
             ),
           ],
-          // TODO: カンマを入れて改行を整えましょう
-        )));
+        ),
+      ),
+    );
   }
 }
