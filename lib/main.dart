@@ -5,6 +5,8 @@ void main() {
   runApp(const MyApp());
 }
 
+// TODO: Hook機能を使ってないのでStatelessで良い。
+// 使ってないのにHookやConsumerを定義してしまうと、可読性が下がってしまいます。
 class MyApp extends HookWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -27,7 +29,14 @@ class MyAppPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     //インスタンスを作成
+    // TODO: 変数で管理しているのは色のため、changeって命名は適切ではない
     final change = useState(Colors.green);
+
+    // TODO:下で指摘した用の関数の土台
+    Color changeColor() {
+      return Colors.pink;
+    }
+
     return Scaffold(
         appBar: AppBar(
           title: Text(title),
@@ -47,6 +56,7 @@ class MyAppPage extends HookWidget {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: ElevatedButton(
+                // TODO: onPressedの中身が長いので、関数に切り出す
                 onPressed: () {
                   if (change.value == Colors.green) {
                     change.value = Colors.red;
@@ -66,6 +76,7 @@ class MyAppPage extends HookWidget {
               ),
             ),
           ],
+          // TODO: カンマを入れて改行を整えましょう
         )));
   }
 }
